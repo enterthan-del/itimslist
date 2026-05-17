@@ -154,15 +154,16 @@ with tab1:
                         st.rerun()
 
                 # [카드 디자인]HTML로 시각적 요소 출력
+                # [카드 디자인] HTML로 시각적 요소 출력
                 st.markdown(f"""
                     <div class="item-card" style="background-color: {bg_color}; border-left-color: {main_color};">
                         <div>
                             <div class="item-title">{row['물건 이름']}</div>
                             <div style="font-size: 0.75rem; color: {main_color}; font-weight: bold; margin-bottom: 5px;">{row['카테고리']}</div>
                             
-                            #<!-- 메모 항목 추가: 최대 2줄 표시 후 생략 -->
+                            <!-- 메모 출력 부분 -->
                             <div style="font-size: 0.8rem; color: #666; line-height: 1.3; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; min-height: 2.6em;">
-                                {row.get('메모', '')}
+                                {row['메모']}
                             </div>
                         </div>
                         
