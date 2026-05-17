@@ -137,9 +137,12 @@ with tab1:
             main_color, bg_color = get_category_theme(row['카테고리'])
             
             with cols[j]:
-                # [데이터 가공] 메모가 비어있으면 한 칸 띄어쓰기(&nbsp;)로 채움
-                memo_text = str(row['메모']).strip() if row['메모'] else "&nbsp;"
-                # [수정 팝오버]
+                # [데이터 가공] 메모가 없으면 공백(&nbsp;)으로 채워 레이아웃 깨짐 방지
+                # row.get()을 사용하여 컬럼이 없거나 데이터가 비어있을 때를 대비합니다.
+                memo_raw = row.get('메모', '')
+                memo_text = str(memo_raw).strip() if memo_raw and str(memo_raw).strip() != "" else "&nbsp;"
+                
+                # 1. 은밀한 수정 버튼 (기존과 동일)
                 with st.popover("⚙️", key=f"t1_pop_{orig_idx}"):
                     st.write(f"**{row['물건 이름']}** 수정")
                     current_loc = row['보관 위치']
@@ -155,15 +158,14 @@ with tab1:
                         st.success("저장되었습니다.")
                         st.rerun()
 
-                # [카드 디자인]HTML로 시각적 요소 출력
-                # [카드 디자인] HTML로 시각적 요소 출력
+                # 2. 카드 디자인 (오타 수정됨: {memo_text})
                 st.markdown(f"""
                     <div class="item-card" style="background-color: {bg_color}; border-left-color: {main_color};">
                         <div>
                             <div class="item-title">{row['물건 이름']}</div>
                             <div style="font-size: 0.75rem; color: {main_color}; font-weight: bold; margin-bottom: 5px;">{row['카테고리']}</div>
                             <div style="font-size: 0.8rem; color: #666; line-height: 1.3; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; min-height: 2.6em;">
-                                {memo_text]}
+                                {memo_text}
                             </div>
                         </div>
                         <div style="margin-top: 5px;">
