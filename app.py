@@ -163,7 +163,7 @@ with tab1:
                             <div class="item-title">{row['물건 이름']}</div>
                             <div style="font-size: 0.75rem; color: {main_color}; font-weight: bold; margin-bottom: 5px;">{row['카테고리']}</div>
                             <div style="font-size: 0.8rem; color: #666; line-height: 1.3; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; min-height: 2.6em;">
-                                {row_text]}
+                                {memo_text]}
                             </div>
                         </div>
                         <div style="margin-top: 5px;">
