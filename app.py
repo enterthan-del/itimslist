@@ -137,6 +137,8 @@ with tab1:
             main_color, bg_color = get_category_theme(row['카테고리'])
             
             with cols[j]:
+                # [데이터 가공] 메모가 비어있으면 한 칸 띄어쓰기(&nbsp;)로 채움
+                memo_text = str(row['메모']).strip() if row['메모'] else "&nbsp;"
                 # [수정 팝오버]
                 with st.popover("⚙️", key=f"t1_pop_{orig_idx}"):
                     st.write(f"**{row['물건 이름']}** 수정")
@@ -161,7 +163,7 @@ with tab1:
                             <div class="item-title">{row['물건 이름']}</div>
                             <div style="font-size: 0.75rem; color: {main_color}; font-weight: bold; margin-bottom: 5px;">{row['카테고리']}</div>
                             <div style="font-size: 0.8rem; color: #666; line-height: 1.3; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; min-height: 2.6em;">
-                                {row['메모']}
+                                {row_text]}
                             </div>
                         </div>
                         <div style="margin-top: 5px;">
