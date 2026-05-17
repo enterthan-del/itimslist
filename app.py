@@ -160,20 +160,17 @@ with tab1:
                         <div>
                             <div class="item-title">{row['물건 이름']}</div>
                             <div style="font-size: 0.75rem; color: {main_color}; font-weight: bold; margin-bottom: 5px;">{row['카테고리']}</div>
-                            
-                            <!-- 메모 출력 부분 -->
                             <div style="font-size: 0.8rem; color: #666; line-height: 1.3; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; min-height: 2.6em;">
                                 {row['메모']}
                             </div>
                         </div>
-                        
                         <div style="margin-top: 5px;">
                             <div class="loc-tag" style="font-size: 0.82rem; color: #555; font-weight: 500; background: rgba(255,255,255,0.5); padding: 2px 8px; border-radius: 4px; width: fit-content;">
                                 📍 {row['보관 위치'] if row['보관 위치'] else '미지정'}
                             </div>
                         </div>
                     </div>
-                    """, unsafe_allow_html=True)
+                """, unsafe_allow_html=True)
 
 # --- Tab 2: 신규 등록 ---
 with tab2:
