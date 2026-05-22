@@ -179,19 +179,53 @@ with tab1:
 # --- Tab 2: 신규 등록 ---
 with tab2:
     st.subheader("새 물품 등록")
+    
+    # 카테고리 및 보관 위치 옵션 설정
+    cat_options = sorted(df['카테고리'].unique().tolist()) + ["직접 입력"]
+    loc_options = sorted([l for l in df['보관 위치'].unique() if l]) + ["직접 입력"]
+
+    # 카테고리 변경 시 보관 위치를 자동으로 변경하는 콜백 함수
+    def on_cat_change():
+        selected_cat = st.session_state.new_cat
+        if selected_cat != "직접 입력":
+            # 선택된 카테고리에 속하는 물품들 중 가장 많이 쓰인 보관 위치 찾기
+            cat_df = df[df['카테고리'] == selected_cat]
+            valid_locs = cat_df['보관 위치'].replace('', pd.NA).dropna()
+            if not valid_locs.empty:
+                st.session_state.new_loc = valid_locs.mode().iloc[0]
+
+    # 세션 상태에 초기 보관 위치 설정 (최초 1회)
+    if "new_loc" not in st.session_state:
+        st.session_state.new_loc = loc_options[0] if loc_options else "직접 입력"
+
+    # 카테고리와 보관 위치 선택 박스를 폼 바깥으로 빼서 실시간 반응하도록 함
+    c1, c2 = st.columns(2)
+    with c1:
+        f_cat = st.selectbox("카테고리", cat_options, key="new_cat", on_change=on_cat_change)
+    with c2:
+        f_loc = st.selectbox("보관 위치", loc_options, key="new_loc")
+
+    # 나머지 입력 필드와 등록 버튼은 폼 안에 유지하여 일괄 처리
     with st.form("new_item_form", clear_on_submit=True):
         f_name = st.text_input("물품명*")
-        f_cat = st.selectbox("카테고리", sorted(df['카테고리'].unique().tolist()) + ["직접 입력"])
-        f_loc = st.selectbox("보관 위치", sorted([l for l in df['보관 위치'].unique() if l]) + ["직접 입력"])
         f_memo = st.text_area("메모")
-        if st.form_submit_button("등록하기") and f_name:
-            new_id = int(df['번호'].max()) + 1 if not df.empty else 1
-            new_row = pd.DataFrame([{"번호": new_id, "물건 이름": f_name, "카테고리": f_cat, "보관 위치": f_loc, "메모": f_memo}])
-            df = pd.concat([df, new_row], ignore_index=True)
-            save_data(df)
-            st.success("등록 완료!")
-            st.rerun()
-
+        
+        if st.form_submit_button("등록하기"):
+            if f_name:
+                new_id = int(df['번호'].max()) + 1 if not df.empty else 1
+                new_row = pd.DataFrame([{
+                    "번호": new_id, 
+                    "물건 이름": f_name, 
+                    "카테고리": f_cat, 
+                    "보관 위치": f_loc, 
+                    "메모": f_memo
+                }])
+                df = pd.concat([df, new_row], ignore_index=True)
+                save_data(df)
+                st.success("등록 완료!")
+                st.rerun()
+            else:
+                st.error("물품명을 입력해주세요.")
 # --- Tab 3: 전체 관리 ---
 with tab3:
     st.subheader("데이터베이스 관리")
